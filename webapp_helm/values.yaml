@@ -1,0 +1,14 @@
+image:
+  repository: qwerty99/webapp
+  tag: latest
+  pullPolicy: IfNotPresent
+
+replicaCount: 1
+
+service:
+  type: LoadBalancer
+  port: 80
+
+ingress:
+  enabled: true
+
