@@ -1,7 +1,7 @@
 # Step 1: Build the application
 FROM maven:3.9.9-eclipse-temurin-23 AS builder
 WORKDIR /app
-COPY ./webapp/ .
+COPY ./webapp_project/ .
 RUN mvn clean package -DskipTests
 
 # Step 2: Create the runtime image
