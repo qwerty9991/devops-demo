@@ -4,9 +4,9 @@ on:
   push:
     branches:
       - webapp   # Trigger this workflow only on pushes to the "webapp" branch
-  pull_request:
-    branches:
-      - webapp   # Trigger on pull requests to the "webapp" branch
+#  pull_request:
+#    branches:
+#      - webapp   # Trigger on pull requests to the "webapp" branch
 
 jobs:
   build:
