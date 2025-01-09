@@ -46,11 +46,11 @@ jobs:
         run: |
           docker build -t qwerty99/webapp:java-17-ci-cd-01 -f Dockerfile .
           docker push qwerty99/webapp:java-17-ci-cd-01
-  deploy:
-    runs-on: ubuntu-latest
-    needs: build
-    environment:
-      name: production
+  # deploy:
+  #   runs-on: ubuntu-latest
+  #   needs: build
+  #   environment:
+  #     name: production
 
     # steps:
     #   - name: Checkout "webapp" branch
