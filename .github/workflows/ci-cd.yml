@@ -28,11 +28,8 @@ jobs:
       - name: Install Maven 3.9
         run: sudo apt-get update && sudo apt-get install -y maven
 
-      - name: Change directory to webapp application
-        run: |
-          cd webapp
-
       - name: Build with Maven
+        working-directory: ./webapp
         run: mvn clean package --file webapp_project/pom.xml
 
       - name: Set up Docker Buildx
@@ -45,14 +42,15 @@ jobs:
           password: ${{ secrets.DOCKER_TOKEN }}
 
       - name: Build and push Docker image to DockerHub
+        working-directory: ./webapp
         run: |
           docker build -t qwerty99/webapp:java-17-ci-cd-01 -f Dockerfile .
           docker push qwerty99/webapp:java-17-ci-cd-01
-  # deploy:
-    # runs-on: ubuntu-latest
-    # needs: build
-    # environment:
-      # name: production
+  deploy:
+    runs-on: ubuntu-latest
+    needs: build
+    environment:
+      name: production
 
     # steps:
     #   - name: Checkout "webapp" branch
