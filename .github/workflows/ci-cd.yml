@@ -73,17 +73,29 @@ jobs:
         uses: actions/checkout@v3
         with:
           ref: webapp   # Checkout the "webapp" branch
-    #   - name: install-aws-cli
-    #     uses: unfor19/install-aws-cli-action@v1
-    #     with:
-    #        version: 2                         # default
-    #        verbose: false                     # default
-    #        arch: amd64                        # allowed values: amd64, arm64
-    #        bindir: "/usr/bin"           # default
-    #        installrootdir: "/usr/local/bin"       # default
+      - name: install-aws-cli
+        uses: unfor19/install-aws-cli-action@v1
+        with:
+           version: 2                         # default
+           verbose: false                     # default
+           arch: amd64                        # allowed values: amd64, arm64
+           bindir: "/usr/bin"           # default
+           installrootdir: "/usr/local/bin"       # default
          
       - name: Installing helm 
         uses: WyriHaximus/github-action-helm3@v3
 
+      - name: Update Kubeconfig for EKS Cluster
+        run: |
+          aws --version
+          aws sts gt-caller-identity
+          # aws eks --region us-east-1 update-kubeconfig --name webapp-eks
+      
+      - name: Deploy helm chart on eks
+        working-directory: ./webapp_helm
+        run: |
+           ls -altr
+           helm version
+           helm install webapp webapp --namespace webapp --create-namespace
       
     
