@@ -9,8 +9,8 @@ on:
 #      - webapp   # Trigger on pull requests to the "webapp" branch
 
 jobs:
-  build:
-    runs-on: ubuntu-latest
+  # build:
+    # runs-on: ubuntu-latest
 
     # steps:
     #   - name: Checkout "webapp" branch
@@ -49,7 +49,7 @@ jobs:
           
   deploy:
     runs-on: ubuntu-latest
-    needs: build
+    # needs: build
     environment:
       name: production
     steps:
