@@ -66,8 +66,13 @@ jobs:
   #         aws-region: us-east-1
   verify:
     runs-on: ubuntu-latest
+    
     # needs: deploy
     steps:
+      - name: Checkout "webapp" branch
+        uses: actions/checkout@v3
+        with:
+          ref: webapp   # Checkout the "webapp" branch
     #   - name: install-aws-cli
     #     uses: unfor19/install-aws-cli-action@v1
     #     with:
@@ -85,10 +90,7 @@ jobs:
       #     aws --version
       #     aws sts gt-caller-identity
       #     # aws eks --region us-east-1 update-kubeconfig --name webapp-eks
-      - name: Checkout "webapp" branch
-        uses: actions/checkout@v3
-        with:
-          ref: webapp   # Checkout the "webapp" branch
+      
       - name: Deploy helm chart on eks
         working-directory: ./webapp_helm
         run: |
