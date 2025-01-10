@@ -64,17 +64,31 @@ jobs:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: us-east-1
-      - name: 'Deploy'
-        
-      # - name: Update Kubeconfig for EKS Cluster
-      #   run: |
-      #     aws eks --region us-east-1 update-kubeconfig --name webapp-eks
-    
-      - name: Setting up helm 
+
+      - name: install-aws-cli
+        uses: unfor19/install-aws-cli-action@v1
+        with:
+           version: 2                         # default
+           verbose: false                     # default
+           arch: amd64                        # allowed values: amd64, arm64
+           bindir: "/usr/local/bin"           # default
+           installrootdir: "/usr/local"       # default
+           rootdir: ""                        # defaults to "PWD"
+           workdir: ""                        # defaults to "PWD/unfor19-awscli"
+         
+      - name: Installing helm 
         uses: 'deliverybot/helm@v1'
+
+      - name: Update Kubeconfig for EKS Cluster
+        run: |
+          aws --version
+          aws sts gt-caller-identity
+          # aws eks --region us-east-1 update-kubeconfig --name webapp-eks
 
       - name: Deploy helm chart on eks
         working-directory: ./webapp_helm
         run: |
-           helm install webapp webapp --namespace webapp --create-namespace
+           ls -altr
+           helm version
+           # helm install webapp webapp --namespace webapp --create-namespace
     
