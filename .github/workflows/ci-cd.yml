@@ -91,10 +91,10 @@ jobs:
       #     aws sts gt-caller-identity
       #     # aws eks --region us-east-1 update-kubeconfig --name webapp-eks
       
-      - name: Deploy helm chart on eks
+      # - name: Deploy helm chart on eks
         # working-directory: ./webapp_helm
-        run: |
-           ls -altr
-           helm version
+        # run: |
+           # ls -altr
+           # helm version
            # helm install webapp webapp --namespace webapp --create-namespace
     
