@@ -72,7 +72,7 @@ jobs:
       - name: Checkout "webapp" branch
         uses: actions/checkout@v3
         with:
-          ref: webapp   # Checkout the "webapp" branch
+          ref: webapp_helm   # Checkout the "webapp" branch
     #   - name: install-aws-cli
     #     uses: unfor19/install-aws-cli-action@v1
     #     with:
