@@ -64,15 +64,17 @@ jobs:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: us-east-1
-
+      - name: 'Deploy'
+        
       # - name: Update Kubeconfig for EKS Cluster
       #   run: |
       #     aws eks --region us-east-1 update-kubeconfig --name webapp-eks
     
+      - name: Setting up helm 
+        uses: 'deliverybot/helm@v1'
+
       - name: Deploy helm chart on eks
         working-directory: ./webapp_helm
         run: |
-           pwd
-           # aws s3 ls
-          # helm install webapp webapp --namespace webapp --create-namespace
+           helm install webapp webapp --namespace webapp --create-namespace
     
