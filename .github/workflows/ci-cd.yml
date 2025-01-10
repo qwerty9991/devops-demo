@@ -92,7 +92,7 @@ jobs:
       #     # aws eks --region us-east-1 update-kubeconfig --name webapp-eks
       
       - name: Deploy helm chart on eks
-        working-directory: ./webapp_helm
+        # working-directory: ./webapp_helm
         run: |
            ls -altr
            helm version
