@@ -1,7 +1,7 @@
 name: Deploy Infrastructure to AWS EKS
 
 on:
-  status:
+  push:
     branches:
       - webapp 
 jobs:
