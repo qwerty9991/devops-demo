@@ -36,7 +36,7 @@ jobs:
           aws-region: us-east-1  
 
       - name: Initialize Terraform
-        working-directory: ./terraform/aws-infrastructure
+        working-directory: ./eks_infra/eks_cluster
         run: terraform init
 
       - name: Validate Terraform
