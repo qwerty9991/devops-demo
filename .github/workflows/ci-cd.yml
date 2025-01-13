@@ -3,87 +3,17 @@ name: CI/CD Pipeline for Java Web App
 on:
   push:
     branches:
-      - webapp   # Trigger this workflow only on pushes to the "webapp" branch
-#  pull_request:
-#    branches:
-#      - webapp   # Trigger on pull requests to the "webapp" branch
+      - webapp
 
 jobs:
-  build:
+  build-and-deploy:
     runs-on: ubuntu-latest
+
     steps:
-      - name: Checkout "webapp" branch
-        uses: actions/checkout@v3
+      - name: Run CI/CD Deployment Action
+        uses: ./github/actions/cicd-action  # Reference the composite action
         with:
-          ref: webapp   # Checkout the "webapp" branch
-
-      - name: Set up Maven 3.9
-        uses: actions/setup-java@v3
-        with:
-          java-version: '17'
-          distribution: 'temurin'
-          cache: 'maven'
-
-      - name: Install Maven 3.9
-        run: sudo apt-get update && sudo apt-get install -y maven
-
-      - name: Build with Maven
-        working-directory: ./webapp
-        run: mvn clean package --file webapp_project/pom.xml
-
-      - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v2
-
-      - name: Log in to DockerHub
-        uses: docker/login-action@v2
-        with:
-          username: ${{ secrets.DOCKER_USERNAME }}
-          password: ${{ secrets.DOCKER_TOKEN }}
-
-      - name: Build and push Docker image to DockerHub
-        working-directory: ./webapp
-        run: |
-          docker build -t qwerty99/webapp:java-17-ci-cd-01 -f Dockerfile .
-          docker push qwerty99/webapp:java-17-ci-cd-01
-          
-  deploy:
-    runs-on: ubuntu-latest
-    permissions:
-      id-token: write
-      contents: read
-    needs: build
-    environment:
-      name: production
-    steps:
-      - name: Checkout "webapp" branch
-        uses: actions/checkout@v3
-        with:
-          ref: webapp   # Checkout the "webapp" branch
-      - name: Configure AWS credentials
-        uses: aws-actions/configure-aws-credentials@v2
-        with:
-          role-to-assume: arn:aws:iam::123456789:role/github-demo-deployment
-          aws-region: us-east-1
-      - name: install-aws-cli
-        uses: unfor19/install-aws-cli-action@v1
-        with:
-           version: 2                         # default
-           verbose: false                     # default
-           arch: amd64                        # allowed values: amd64, arm64
-           bindir: "/usr/bin"           # default
-           installrootdir: "/usr/local/bin"       # default
-         
-      - name: Installing helm 
-        uses: WyriHaximus/github-action-helm3@v3
-
-      - name: Update Kubeconfig for EKS Cluster
-        run: |
-          aws sts get-caller-identity
-          # aws eks --region us-east-1 update-kubeconfig --name webapp-eks
-      
-      - name: Deploy helm chart on eks
-        working-directory: ./webapp_helm
-        run: |
-           ls -altr
-           helm version
-           # helm install webapp webapp --namespace webapp --create-namespace
+          aws-region: 'us-east-1'
+          role-to-assume: ${{ secrets.AWS_ROLE_ARN }}  # Pass the IAM Role ARN from GitHub secrets
+          docker-username: ${{ secrets.DOCKER_USERNAME }}
+          docker-token: ${{ secrets.DOCKER_TOKEN }}
