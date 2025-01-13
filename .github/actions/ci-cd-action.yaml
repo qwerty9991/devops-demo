@@ -2,16 +2,13 @@ name: 'CI/CD Deployment for Java Web App'
 description: 'Composite Action for building and deploying the Java web application using Docker and Helm on AWS.'
 
 inputs:
-  aws-access-key-id:
-    description: 'AWS Access Key ID'
-    required: true
-  aws-secret-access-key:
-    description: 'AWS Secret Access Key'
-    required: true
   aws-region:
     description: 'AWS Region'
     required: true
     default: 'us-east-1'
+  role-to-assume:
+    description: 'IAM Role ARN to assume for deployment'
+    required: true
   docker-username:
     description: 'DockerHub username'
     required: true
@@ -56,11 +53,10 @@ runs:
         docker build -t qwerty99/webapp:java-17-ci-cd-01 -f Dockerfile .
         docker push qwerty99/webapp:java-17-ci-cd-01
 
-    - name: Configure AWS credentials
+    - name: Assume IAM Role using OIDC
       uses: aws-actions/configure-aws-credentials@v2
       with:
-        aws-access-key-id: ${{ inputs.aws-access-key-id }}
-        aws-secret-access-key: ${{ inputs.aws-secret-access-key }}
+        role-to-assume: ${{ inputs.github-demo }}
         aws-region: ${{ inputs.aws-region }}
 
     - name: Update Kubeconfig for EKS Cluster
