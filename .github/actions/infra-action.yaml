@@ -2,16 +2,13 @@ name: 'AWS EKS Infrastructure Provisioning'
 description: 'Composite Action for provisioning AWS infrastructure using Terraform.'
 
 inputs:
-  aws-access-key-id:
-    description: 'AWS Access Key ID'
-    required: true
-  aws-secret-access-key:
-    description: 'AWS Secret Access Key'
-    required: true
   aws-region:
     description: 'AWS Region'
     required: true
     default: 'us-east-1'
+  role-to-assume:
+    description: 'IAM Role ARN to assume for provisioning'
+    required: true
 
 runs:
   using: 'composite'
@@ -21,11 +18,10 @@ runs:
       with:
         ref: webapp
 
-    - name: Configure AWS Credentials
+    - name: Assume IAM Role using OIDC
       uses: aws-actions/configure-aws-credentials@v2
       with:
-        aws-access-key-id: ${{ inputs.aws-access-key-id }}
-        aws-secret-access-key: ${{ inputs.aws-secret-access-key }}
+        role-to-assume: ${{ inputs.github-demo }}
         aws-region: ${{ inputs.aws-region }}
 
     - name: Set up Terraform
@@ -43,4 +39,3 @@ runs:
     # - name: Apply AWS EKS Infrastructure
     #   working-directory: ./eks_infra/eks_cluster
     #   run: terraform apply -auto-approve plan.tfplan
-
