@@ -21,7 +21,6 @@ jobs:
           aws-region: 'us-east-1'
           working-directory: './eks_infra/eks_cluster'
           auto-apply: 'true'  # Automatically apply the plan after Terraform plan
-		  
   eks-ingress:
     name: Install AWS EKS ALB ingress
     runs-on: ubuntu-latest
