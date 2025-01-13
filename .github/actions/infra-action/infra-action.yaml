@@ -1,0 +1,41 @@
+name: 'AWS EKS Infrastructure Provisioning'
+description: 'Composite Action for provisioning AWS infrastructure using Terraform.'
+
+inputs:
+  aws-region:
+    description: 'AWS Region'
+    required: true
+    default: 'us-east-1'
+  role-to-assume:
+    description: 'IAM Role ARN to assume for provisioning'
+    required: true
+
+runs:
+  using: 'composite'
+  steps:
+    - name: Checkout repository
+      uses: actions/checkout@v3
+      with:
+        ref: webapp
+
+    - name: Assume IAM Role using OIDC
+      uses: aws-actions/configure-aws-credentials@v2
+      with:
+        role-to-assume: ${{ inputs.github-demo }}
+        aws-region: ${{ inputs.aws-region }}
+
+    - name: Set up Terraform
+      uses: hashicorp/setup-terraform@v3
+
+    - name: Initialize Terraform
+      working-directory: ./eks_infra/eks_cluster
+      run: terraform init
+
+    - name: Plan AWS Infrastructure
+      working-directory: ./eks_infra/eks_cluster
+      run: terraform plan -out=plan.tfplan
+
+    # Uncomment this step to apply the infrastructure
+    # - name: Apply AWS EKS Infrastructure
+    #   working-directory: ./eks_infra/eks_cluster
+    #   run: terraform apply -auto-approve plan.tfplan
