@@ -32,12 +32,12 @@ runs:
         distribution: 'temurin'
         cache: 'maven'
 
-    - name: Install Maven
-      run: sudo apt-get update && sudo apt-get install -y maven
+    # - name: Install Maven
+    #   run: sudo apt-get update && sudo apt-get install -y maven
 
-    - name: Build with Maven
-      working-directory: ./webapp
-      run: mvn clean package --file webapp_project/pom.xml
+    # - name: Build with Maven
+    #   working-directory: ./webapp
+    #   run: mvn clean package --file webapp_project/pom.xml
 
     - name: Set up Docker Buildx
       uses: docker/setup-buildx-action@v2
@@ -48,11 +48,11 @@ runs:
         username: ${{ inputs.docker-username }}
         password: ${{ inputs.docker-token }}
 
-    - name: Build and push Docker image to DockerHub
-      working-directory: ./webapp
-      run: |
-        docker build -t qwerty99/webapp:java-17-ci-cd-01 -f Dockerfile .
-        docker push qwerty99/webapp:java-17-ci-cd-01
+    # - name: Build and push Docker image to DockerHub
+    #   working-directory: ./webapp
+    #   run: |
+    #     docker build -t qwerty99/webapp:java-17-ci-cd-01 -f Dockerfile .
+    #     docker push qwerty99/webapp:java-17-ci-cd-01
 
     - name: Assume IAM Role using OIDC
       uses: aws-actions/configure-aws-credentials@v2
