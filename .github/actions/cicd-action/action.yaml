@@ -70,3 +70,4 @@ runs:
         ls -altr
         helm version
         #helm install webapp webapp --namespace webapp --create-namespace
+      shell: bash
