@@ -1,4 +1,4 @@
-#### Step 1: Build the application
+### Step 1: Build the application
 FROM maven:3.9.9-eclipse-temurin-23 AS builder
 WORKDIR /app
 COPY ./webapp_project/ .
