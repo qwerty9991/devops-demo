@@ -33,10 +33,12 @@ runs:
 
     - name: Install Maven
       run: sudo apt-get update && sudo apt-get install -y maven
+      shell: bash
 
     - name: Build with Maven
       working-directory: ./webapp
       run: mvn clean package --file webapp_project/pom.xml
+      shell: bash
 
     - name: Set up Docker Buildx
       uses: docker/setup-buildx-action@v2
@@ -52,6 +54,7 @@ runs:
       run: |
         docker build -t qwerty99/webapp:java-17-ci-cd-01 -f Dockerfile .
         docker push qwerty99/webapp:java-17-ci-cd-01
+      shell: bash  
 
     - name: Assume IAM Role using OIDC
       uses: aws-actions/configure-aws-credentials@v2
@@ -63,6 +66,7 @@ runs:
       run: |
         aws sts get-caller-identity
         aws eks --region ${{ inputs.aws-region }} update-kubeconfig --name webapp-eks
+      shell: bash  
 
     - name: Deploy Helm chart on EKS
       working-directory: ./webapp_helm
